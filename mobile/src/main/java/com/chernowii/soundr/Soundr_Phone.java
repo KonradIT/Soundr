@@ -33,16 +33,20 @@ import java.util.List;
 import java.util.Set;
 
 public class Soundr_Phone extends AppCompatActivity {
-    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+    private ListView AppList;
     Intent appIntent;
     public static final String PREFS = "Preferences";
     public List<String> app_list = new ArrayList<String>();
+    List<String> your_array_list = new ArrayList();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_soundr__phone);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        your_array_list.add("foo");
+        your_array_list.add("bar");
         if (!isNotificationEnabled(this)) {
             new AlertDialog.Builder(this)
                     .setTitle("Please enable notification access setting for Soundr")
@@ -59,6 +63,13 @@ public class Soundr_Phone extends AppCompatActivity {
                     .show();
 
         }
+        AppList = (ListView) findViewById(R.id.enabledapps);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                app_list );
+
+        AppList.setAdapter(arrayAdapter);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +80,7 @@ public class Soundr_Phone extends AppCompatActivity {
 
     }
 public void addApp(){
+    AlertDialog.Builder alert = new AlertDialog.Builder(this);
     final EditText edittext = new EditText(this);
     alert.setMessage("Add App");
     alert.setTitle("Enter the package Name");
@@ -77,20 +89,29 @@ public void addApp(){
 
     alert.setPositiveButton("Add App", new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
-            //What ever you want to do with the value
             app_list.add(edittext.getText().toString());
+            refreshAppList();
+
         }
     });
 
     alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
-            // what ever you want to do with No option.
         }
     });
 
     alert.show();
 }
+void refreshAppList(){
 
+    AppList = (ListView) findViewById(R.id.enabledapps);
+    ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+            this,
+            android.R.layout.simple_list_item_1,
+            your_array_list );
+
+    AppList.setAdapter(arrayAdapter);
+}
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
